@@ -15,6 +15,7 @@ export function Main() {
   const currentPageIndexRef = useRef(currentPageIndex);
 
   useEffect(() => {
+    document.title = page.title;
     const switchPage = (goDown: boolean) => {
       console.log(currentPageIndex);
       if (goDown && currentPageIndex < page.contents.length - 1) {
@@ -39,6 +40,7 @@ export function Main() {
         switchPage(false);
       }
     }
+
     const debouncedEventHandler = __.debounce(eventHandler, 500)
     window.addEventListener("wheel", debouncedEventHandler);
     return () => {
@@ -46,11 +48,11 @@ export function Main() {
     };
   });
   return <div>
-    <div key={currentPageIndex + 'show'} className={styles.show}>
-      <PageElement content={currentPage}/>
-    </div>
     <div key={currentPageIndex + 'disappear'} className={styles.disappear}>
-      <PageElement content={prevPage}/>
+      <PageElement isDisAppear={true} content={prevPage}/>
+    </div>
+    <div key={currentPageIndex + 'show'} className={styles.show}>
+      <PageElement isDisAppear={false} content={currentPage}/>
     </div>
   </div>
 }

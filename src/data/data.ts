@@ -1,7 +1,7 @@
 import {IPage} from "../types/page";
 
 export const pageData: IPage = {
-  title: "Demo",
+  title: "UShow Demo",
   theme: "default",
   contents: [
     {
@@ -9,19 +9,26 @@ export const pageData: IPage = {
       contents: [
         {
           type: "text",
-          content: "Hello,UShow!"
+          bold: true,
+          content: "UShow"
         },
         {
           type: "text",
-          content: "Hello,UShow!"
+          content: "下一代"
         },
         {
           type: "text",
-          content: "Hello,UShow!"
+          color: '#005CAF',
+          content: "数据驱动"
         },
         {
           type: "text",
-          content: "Hello,UShow!"
+          content: "产品展示框架"
+        },
+        {
+          type: 'button',
+          content: '立刻了解',
+          href:'https://github.com/MakinoharaShoko/UShow'
         },
       ]
     },

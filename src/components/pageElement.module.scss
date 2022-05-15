@@ -32,3 +32,18 @@
   flex-flow: column;
   justify-content: center;
 }
+
+.singleText {
+  font-size: xxx-large;
+  padding: 0.25em 0.5em 0.25em 0.5em;
+}
+
+.singleButton {
+  margin: 0.25em 0.5em 0.25em 0.5em;
+  font-size: xx-large;
+  background: linear-gradient(135deg, #005CAF 0%, #0B346E 100%);
+  border: none;
+  cursor: pointer;
+  border-radius: 100px;
+  padding: 0.25em 1em 0.25em 1em;
+}
