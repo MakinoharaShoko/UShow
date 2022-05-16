@@ -1,16 +1,21 @@
-import {IContent} from "../types/element";
+import {IContent} from "../../types/element";
 import {ReactElement} from "react";
-import styles from './pageElement.module.scss'
 import './animation.scss'
+import {theme} from "../../types/page";
+import {getAnimationName} from "./getAnimationName";
+import {getImageAnimationName} from "./getImageAnimationName";
+import {getStyle} from "./getStyle";
 
 interface IProps {
   content: IContent | null;
   isDisAppear: boolean;
+  styleName: theme
 }
 
 export function PageElement(props: IProps) {
   let returnElement = <div style={{display: "none"}}/>
   if (props) {
+    const styles = getStyle(props.styleName);
     const contents: Array<ReactElement> = [];
     /**
      * 处理单个元素
@@ -22,10 +27,8 @@ export function PageElement(props: IProps) {
       const textBold = isBold ? 'bold' : 'normal';
       // 字体的颜色
       const textColor = e.color ?? '#000000';
-      // 按钮的指向
-      const buttonHref = e.href ?? '';
       // 设置动画效果
-      let animationName = 'elementDefault';
+      let animationName = getAnimationName(props.styleName);
       let animation = `${animationName} 0.5s`
       let opacity = '0';
       if (props.isDisAppear) {
@@ -69,7 +72,7 @@ export function PageElement(props: IProps) {
      */
     const picSrc = props.content?.mainPicSrc ?? '';
     const hasPic = picSrc !== '';
-    let picAnimationName = 'elementDefault';
+    let picAnimationName = getImageAnimationName(props.styleName);
     let picAnimation = `${picAnimationName} 1s`
     if (props.isDisAppear) {
       picAnimation = ``;

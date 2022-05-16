@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {PageElement} from "./PageElement";
+import {PageElement} from "../PageElement/PageElement";
 import __ from 'lodash';
 import styles from './main.module.scss'
-import {IContent} from "../types/element";
-import {IPage} from "../types/page";
+import {IContent} from "../../types/element";
+import {IPage} from "../../types/page";
 import * as Hammer from 'hammerjs';
 
 interface IProps {
@@ -16,6 +16,7 @@ export function Main(props: IProps) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   // 当前的页面数据
   const page = props.pageData;
+  const styleName = page.theme;
   const [currentPage, setCurrentPage] = useState(page.contents[currentPageIndex]);
   const [prevPage, setPrevPage] = useState<IContent | null>(null);
 
@@ -74,10 +75,10 @@ export function Main(props: IProps) {
   });
   return <div>
     <div key={currentPageIndex + 'disappear'} className={styles.disappear}>
-      <PageElement isDisAppear={true} content={prevPage}/>
+      <PageElement styleName={styleName} isDisAppear={true} content={prevPage}/>
     </div>
     <div id={'showPage'} key={currentPageIndex + 'show'} className={styles.show}>
-      <PageElement isDisAppear={false} content={currentPage}/>
+      <PageElement styleName={styleName} isDisAppear={false} content={currentPage}/>
     </div>
   </div>
 }
