@@ -4,6 +4,7 @@ import __ from 'lodash';
 import styles from './main.module.scss'
 import {IContent} from "../types/element";
 import {IPage} from "../types/page";
+import * as Hammer from 'hammerjs';
 
 interface IProps {
   pageData: IPage
@@ -36,26 +37,46 @@ export function Main(props: IProps) {
         setCurrentPageIndex(currentPageIndex - 1);
       }
     };
+    const debouncedSwitch = __.debounce(switchPage, 500);
 
     function eventHandler(e: WheelEvent) {
       if (e.deltaY > 0) {
-        switchPage(true);
+        debouncedSwitch(true);
       } else {
-        switchPage(false);
+        debouncedSwitch(false);
       }
     }
 
-    const debouncedEventHandler = __.debounce(eventHandler, 500)
-    window.addEventListener("wheel", debouncedEventHandler);
+
+    window.addEventListener("wheel", eventHandler);
+    const appRoot = document.getElementById('showPage');
+    let hammer: HammerManager;
+    let swiper;
+    if (appRoot) {
+      hammer = new Hammer.Manager(appRoot);
+      swiper = new Hammer.Swipe();
+      hammer.add(swiper);
+      hammer.on('swipeup', () => {
+        debouncedSwitch(true)
+      });
+      hammer.on('swipedown', () => {
+        debouncedSwitch(false)
+      });
+    }
+
     return () => {
-      window.removeEventListener("wheel", debouncedEventHandler);
+      window.removeEventListener("wheel", eventHandler);
+      if (appRoot) {
+        hammer.off('swipedown');
+        hammer.off('swipeup');
+      }
     };
   });
   return <div>
     <div key={currentPageIndex + 'disappear'} className={styles.disappear}>
       <PageElement isDisAppear={true} content={prevPage}/>
     </div>
-    <div key={currentPageIndex + 'show'} className={styles.show}>
+    <div id={'showPage'} key={currentPageIndex + 'show'} className={styles.show}>
       <PageElement isDisAppear={false} content={currentPage}/>
     </div>
   </div>

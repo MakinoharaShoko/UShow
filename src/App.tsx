@@ -4,7 +4,7 @@ import {pageData} from "./data/data";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" id={'appRoot'} style={{height: '100vh', width: '100vw'}}>
       <Main pageData={pageData}/>
     </div>
   )
