@@ -1,10 +1,11 @@
 import './App.css'
 import {Main} from "./components/Main";
+import {pageData} from "./data/data";
 
 function App() {
   return (
     <div className="App">
-      <Main/>
+      <Main pageData={pageData}/>
     </div>
   )
 }

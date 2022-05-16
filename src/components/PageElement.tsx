@@ -27,8 +27,10 @@ export function PageElement(props: IProps) {
       // 设置动画效果
       let animationName = 'elementDefault';
       let animation = `${animationName} 0.5s`
+      let opacity = '0';
       if (props.isDisAppear) {
         animation = '';
+        opacity = '1';
       }
       /**
        * 生成元素
@@ -38,7 +40,7 @@ export function PageElement(props: IProps) {
           fontWeight: textBold,
           color: textColor,
           animation: animation,
-          opacity: '0',
+          opacity: opacity,
           animationDelay: `${i * 100 + 500}ms`,
           animationFillMode: 'forwards',
         }} className={styles.singleText}>{e.content}</div>;
@@ -49,7 +51,7 @@ export function PageElement(props: IProps) {
         const href = e.href ?? '#';
         const thisElement = <button key={'pageContent' + i} style={{
           animation: animation,
-          opacity: '0',
+          opacity: opacity,
           animationDelay: `${i * 100 + 500}ms`,
           animationFillMode: 'forwards',
         }} className={styles.singleButton}><a style={{
@@ -69,6 +71,9 @@ export function PageElement(props: IProps) {
     const hasPic = picSrc !== '';
     let picAnimationName = 'elementDefault';
     let picAnimation = `${picAnimationName} 1s`
+    if (props.isDisAppear) {
+      picAnimation = ``;
+    }
     returnElement = <div className={styles.page}>
       {hasPic && <div className={styles.picContainer}
                       style={{backgroundImage: `url(${props.content?.mainPicSrc})`, animation: picAnimation}}/>}

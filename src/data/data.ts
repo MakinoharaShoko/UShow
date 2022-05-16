@@ -5,7 +5,7 @@ export const pageData: IPage = {
   theme: "default",
   contents: [
     {
-      mainPicSrc: "https://raw.githubusercontent.com/MakinoharaShoko/WebGAL_Demo_Page/main/game/figure/k6.png",
+      mainPicSrc: "https://raw.githubusercontent.com/MakinoharaShoko/WebGAL_Demo_Page/main/game/figure/k7.png",
       contents: [
         {
           type: "text",
