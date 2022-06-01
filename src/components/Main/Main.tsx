@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {PageElement} from "../PageElement/PageElement";
 import __ from 'lodash';
 import styles from './main.module.scss'
-import {IContent} from "../../types/element";
 import {IPage} from "../../types/page";
 import * as Hammer from 'hammerjs';
+import { useObject } from "../../hooks/useObject";
 
 interface IProps {
   pageData: IPage
@@ -13,38 +13,36 @@ interface IProps {
 
 export function Main(props: IProps) {
   // 当前页数
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const currentPageIndex = useObject(0);
   // 当前的页面数据
   const page = props.pageData;
   const styleName = page.theme;
-  const [currentPage, setCurrentPage] = useState(page.contents[currentPageIndex]);
-  const [prevPage, setPrevPage] = useState<IContent | null>(null);
+  const currentPage = useObject(page.contents[currentPageIndex.state]);
+  const prevPage = useObject(null);
 
   useEffect(() => {
     document.title = page.title;
     const switchPage = (goDown: boolean) => {
-      console.log(currentPageIndex);
-      if (goDown && currentPageIndex < page.contents.length - 1) {
-        console.log('下一页');
-        const prev = __.cloneDeep(currentPage);
-        setPrevPage(prev);
-        setCurrentPage(page.contents[currentPageIndex + 1]);
-        setCurrentPageIndex(currentPageIndex + 1);
-      } else if (!goDown && currentPageIndex > 0) {
-        console.log('上一页');
-        const prev = __.cloneDeep(currentPage);
-        setPrevPage(prev);
-        setCurrentPage(page.contents[currentPageIndex - 1]);
-        setCurrentPageIndex(currentPageIndex - 1);
+      console.log('触发')
+      if (goDown && currentPageIndex.state < page.contents.length - 1) {
+        const prev = __.cloneDeep(currentPage.state);
+        prevPage.setState(prev);
+        currentPage.setState(page.contents[currentPageIndex.state + 1]);
+        currentPageIndex.setState(currentPageIndex.state + 1);
+      } else if (!goDown && currentPageIndex.state > 0) {
+        const prev = __.cloneDeep(currentPage.state);
+        prevPage.setState(prev);
+        currentPage.setState(page.contents[currentPageIndex.state - 1]);
+        currentPageIndex.setState(currentPageIndex.state - 1);
       }
     };
-    const debouncedSwitch = __.debounce(switchPage, 500);
+    const throttledSwitch = __.throttle(switchPage, 500,{'trailing':false});
 
     function eventHandler(e: WheelEvent) {
       if (e.deltaY > 0) {
-        debouncedSwitch(true);
+        throttledSwitch(true);
       } else {
-        debouncedSwitch(false);
+        throttledSwitch(false);
       }
     }
 
@@ -58,10 +56,10 @@ export function Main(props: IProps) {
       swiper = new Hammer.Swipe();
       hammer.add(swiper);
       hammer.on('swipeup', () => {
-        debouncedSwitch(true)
+        throttledSwitch(true)
       });
       hammer.on('swipedown', () => {
-        debouncedSwitch(false)
+        throttledSwitch(false)
       });
     }
 
@@ -72,13 +70,13 @@ export function Main(props: IProps) {
         hammer.off('swipeup');
       }
     };
-  });
+  },[]);
   return <div>
-    <div key={currentPageIndex + 'disappear'} className={styles.disappear}>
-      <PageElement styleName={styleName} isDisAppear={true} content={prevPage}/>
+    <div key={currentPageIndex.state + 'disappear'} className={styles.disappear}>
+      <PageElement styleName={styleName} isDisAppear={true} content={prevPage.state}/>
     </div>
-    <div id={'showPage'} key={currentPageIndex + 'show'} className={styles.show}>
-      <PageElement styleName={styleName} isDisAppear={false} content={currentPage}/>
+    <div id={'showPage'} key={currentPageIndex.state + 'show'} className={styles.show}>
+      <PageElement styleName={styleName} isDisAppear={false} content={currentPage.state}/>
     </div>
   </div>
 }
