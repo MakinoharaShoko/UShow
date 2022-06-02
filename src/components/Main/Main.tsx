@@ -48,7 +48,7 @@ export function Main(props: IProps) {
 
 
     window.addEventListener("wheel", eventHandler);
-    const appRoot = document.getElementById('showPage');
+    const appRoot = document.getElementById('appRoot');
     let hammer: HammerManager;
     let swiper;
     if (appRoot) {
